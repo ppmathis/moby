@@ -8,8 +8,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sirupsen/logrus"
-
 	"github.com/docker/distribution/reference"
 	"github.com/docker/docker/api/types"
 	enginecontainer "github.com/docker/docker/api/types/container"
@@ -28,6 +26,7 @@ import (
 	"github.com/docker/swarmkit/api/genericresource"
 	"github.com/docker/swarmkit/template"
 	gogotypes "github.com/gogo/protobuf/types"
+	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -367,6 +366,8 @@ func (c *containerConfig) hostConfig() *enginecontainer.HostConfig {
 		Isolation:      c.isolation(),
 		Init:           c.init(),
 		Sysctls:        c.spec().Sysctls,
+		CapAdd:         c.spec().Capabilities,
+		CapDrop:        []string{"all"},
 	}
 
 	if c.spec().DNSConfig != nil {
